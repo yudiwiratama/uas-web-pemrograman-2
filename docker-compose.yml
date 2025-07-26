@@ -1,0 +1,174 @@
+version: '3.8'
+
+services:
+  # Laravel Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: learning-dev-app
+    restart: unless-stopped
+    working_dir: /var/www
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_HOST=db
+      - DB_DATABASE=learning_dev
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+    depends_on:
+      - db
+      - redis
+    networks:
+      - learning-dev-network
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: learning-dev-db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: learning_dev
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_password
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql-init:/docker-entrypoint-initdb.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - learning-dev-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: learning-dev-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - learning-dev-network
+
+  # Nginx Load Balancer (Optional - for multiple app instances)
+  nginx:
+    image: nginx:alpine
+    container_name: learning-dev-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx-proxy.conf:/etc/nginx/nginx.conf
+      - ./docker/ssl:/etc/nginx/ssl
+      - ./storage/app/public:/var/www/storage/app/public
+    depends_on:
+      - app
+    networks:
+      - learning-dev-network
+
+  # phpMyAdmin (Optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: learning-dev-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: laravel_user
+      PMA_PASSWORD: laravel_password
+      MYSQL_ROOT_PASSWORD: root_password
+    depends_on:
+      - db
+    networks:
+      - learning-dev-network
+
+  # Redis Commander (Optional - for Redis management)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: learning-dev-redis-commander
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    depends_on:
+      - redis
+    networks:
+      - learning-dev-network
+
+  # Laravel Queue Worker
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: learning-dev-queue
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    command: php artisan queue:work --verbose --tries=3 --timeout=90
+    environment:
+      - APP_ENV=production
+      - DB_HOST=db
+      - DB_DATABASE=learning_dev
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
+      - REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
+      - app
+    networks:
+      - learning-dev-network
+
+  # Laravel Scheduler
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: learning-dev-scheduler
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+    environment:
+      - APP_ENV=production
+      - DB_HOST=db
+      - DB_DATABASE=learning_dev
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
+    depends_on:
+      - db
+      - app
+    networks:
+      - learning-dev-network
+
+# Networks
+networks:
+  learning-dev-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  db_data:
+    driver: local
+  redis_data:
+    driver: local 
