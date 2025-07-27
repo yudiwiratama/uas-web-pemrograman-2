@@ -6,55 +6,27 @@
 
 ---
 
-# 🎓 Learning Management System (LMS)
+# Learning Management System (LMS)
 
-A fully functional and production-ready Learning Management System built with **Laravel 11**, supporting comprehensive course and material management, user authentication, file uploads, and admin moderation.
-
----
+Production ready LMS dibuat dengan framework Laravel 11
 
 ---
 
-## 🧩 Features
+## Fitur
 
-* User authentication and role-based access (User & Admin)
-* Course and material management (CRUD)
-* Support for multiple file types (videos, documents, audio, images)
-* HTML-based article input
-* Comment system for course discussions
-* Admin approval workflow for submitted content
-* Responsive UI with Tailwind CSS
+* Authentikasi pengguna dan akses berdasarkan roles (Pengguna & Admin)
+* Pengelolaan kursus dan materi dengan CRUD (Create Reade Update Delete)
+* Dukungan untuk berbagai jenis file (video, dokumen, audio, gambar)
+* Sistem komentar untuk diskusi
 
-### 👥 User Roles
+### User Roles
 
-* **Users**: Can create courses/materials, participate in discussions
-* **Admins**: Can approve content, manage users, and oversee the system
+* **Users**: Dapat membuat course, dan berpartisipasi dalam diskusi 
+* **Admins**: Approve content, manage user, dan melihat keseluruhan isi dari courses
 
 ---
 
-## 🔧 Recent Fixes & Improvements
-
-* ✅ Fixed route conflicts (`/courses/create`, `/materials/create`)
-* ✅ CRUD enhancements: consistent data display and HTTP method alignment
-* ✅ File upload system improved with type-specific validation (MKV added)
-* ✅ Optimized validation logic based on material type
-
----
-
-## 🎬 Supported File Types
-
-| Type     | Formats                          | Max Size | Notes                       |
-| -------- | -------------------------------- | -------- | --------------------------- |
-| Video    | MP4, AVI, MOV, WMV, FLV, **MKV** | 10MB     | For lectures/tutorials      |
-| Document | PDF                              | 10MB     | For handouts/references     |
-| Audio    | MP3, WAV, AAC, OGG               | 20MB     | For podcasts/voice lectures |
-| Image    | JPEG, PNG, GIF, WebP             | 5MB      | For illustrations/diagrams  |
-| Article  | HTML (rich text input)           | -        | No file upload required     |
-
-> ⚠️ Note: Increase PHP upload limits to enable larger file uploads (see below).
-
----
-
-## ⚙️ PHP Configuration for File Uploads
+## PHP Configuration for File Uploads
 
 By default, PHP limits uploads to **2MB**. To increase:
 
@@ -92,7 +64,7 @@ By default, PHP limits uploads to **2MB**. To increase:
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### Requirements
 
@@ -135,47 +107,8 @@ Password: password
 
 ---
 
-## 🧑‍🏫 How to Use
 
-### For Users
-
-* View courses: `/courses`
-* Create material: `/materials/create` (login required)
-* Create course: `/courses/create` (auto-approved)
-
-### For Admins
-
-* Manage pending materials: `/admin/approvals`
-* Full access to courses, materials, users, and comments
-
----
-
-## ⚙️ System Architecture
-
-**Backend:**
-
-* Laravel 11, PHP 8.2+
-* Sanctum for authentication
-* MySQL/PostgreSQL
-* Laravel Storage (public disk)
-
-**Frontend:**
-
-* Tailwind CSS, Vite
-* Blade templates
-* Vanilla JS for interactions
-
-**Security:**
-
-* CSRF protection
-* File validation (type & size)
-* Role-based access control
-
----
-
-
-
-## 🚀 Deployment Options
+## Deployment Options
 
 ###  VPS / Cloud Server (Ubuntu)
 
@@ -191,7 +124,7 @@ php artisan migrate --force
 php artisan storage:link
 ```
 
-### Docker 🐳 (Recommended)
+### Docker (Recommended)
 
 ```bash
 # Quick Start
@@ -212,7 +145,7 @@ Supports:
 
 ---
 
-## 📦 Docker Overview
+## Docker Overview
 
 **Folder Structure:**
 
@@ -238,3 +171,9 @@ docker-compose exec app bash # Access app container
 
 ---
 
+## Changelogs
+
+* Fixed route conflicts (`/courses/create`, `/materials/create`)
+* CRUD enhancements: consistent data display and HTTP method alignment
+* File upload system improved with type-specific validation (MKV added)
+* Optimized validation logic based on material type
