@@ -1,5 +1,13 @@
 # E-Course / E-Learning / Learning Management System (LMS)
 
+```
+Kelas : IF401
+Nama  : 
+- Yudi Putra Wiratama (230401010202)
+- I Gusti Ngurah Bagus Trsina Andika (230401010136)
+```
+
+
 ## Preview
 <img width="1278" height="704" alt="image" src="https://github.com/user-attachments/assets/a1c2ac90-e4e4-40d6-9b4c-fd8abd2bea41" />
 
