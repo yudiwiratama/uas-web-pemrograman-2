@@ -64,7 +64,7 @@ By default, PHP limits uploads to **2MB**. To increase:
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### Requirements
 
