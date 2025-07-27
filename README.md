@@ -26,7 +26,7 @@ Production ready LMS dibuat dengan framework Laravel 11
 
 ---
 
-## ⚙️ PHP Configuration for File Uploads
+## PHP Configuration for File Uploads
 
 By default, PHP limits uploads to **2MB**. To increase:
 
