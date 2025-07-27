@@ -145,7 +145,7 @@ Supports:
 
 ---
 
-## 📦 Docker Overview
+## Docker Overview
 
 **Folder Structure:**
 
